@@ -11,11 +11,12 @@ public class PlayerControl : MonoBehaviour
     int idleSpriteIndex = 0, runSpritesIndex = 0;
     SpriteRenderer spriteRenderer;
     Rigidbody2D rigidbody_player;
-    bool canJump = true;
+    bool canJump = false;
     float horizontalInput = 0;
     float idleAnimationTime = 0;
-    float fireTime = 0;
+    float fireTime = 0,gameOverTime = 0;
     public GameObject bulletPrefab;
+    bool isOver = false;
 
     void Start()
     {
@@ -26,20 +27,24 @@ public class PlayerControl : MonoBehaviour
     void Update()
     {
         fireTime += Time.deltaTime;
-        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && canJump)
+        if ((Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) && canJump && !isOver)
         {
+            rigidbody_player.velocity = Vector2.zero; //to avoid long jump when going uphill
             rigidbody_player.AddForce(new Vector2(0, 425));
             canJump = false;
         }
         if (Input.GetButtonDown("Fire1"))
         {
-            Fire();
+            if(!isOver) Fire();
         }
+
+        if (transform.position.y < -7) isOver = true;
+        GameOver();
     }
     private void FixedUpdate()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
-        rigidbody_player.velocity = new Vector3(horizontalInput * 5, rigidbody_player.velocity.y, 0);
+        if(!isOver) rigidbody_player.velocity = new Vector3(horizontalInput * 5, rigidbody_player.velocity.y, 0);
 
         characterAnimation();
     }
@@ -97,8 +102,12 @@ public class PlayerControl : MonoBehaviour
     {
         if (collision.gameObject.tag == "EnemyTag")
         {
-            Destroy(transform.gameObject);
-            GameOver();
+            isOver = true;
+        }
+        if (collision.gameObject.tag == "Finish")
+        {
+            if (SceneManager.GetActiveScene().buildIndex == 3) SceneManager.LoadScene("MainMenu");
+            else SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
 
@@ -118,6 +127,24 @@ public class PlayerControl : MonoBehaviour
 
     private void GameOver()
     {
-        SceneManager.LoadScene("MainMenu");
+        if (isOver)
+        {
+            rigidbody_player.gravityScale = 0;
+            rigidbody_player.velocity = Vector2.zero;
+            spriteRenderer.enabled = false;
+            for (int i = 0; i < transform.childCount; i++) //crash body parts
+            {
+                transform.GetChild(i).transform.gameObject.SetActive(true);
+                transform.GetChild(i).GetComponent<Rigidbody2D>().AddForce(new Vector2(Random.Range(-10, 10), Random.Range(-10, 10)));
+            }
+
+            gameOverTime += Time.deltaTime;
+            if (gameOverTime >= 1f)
+            {
+                gameOverTime = 0;
+                SceneManager.LoadScene("MainMenu");
+            }
+        }
+        
     }
 }

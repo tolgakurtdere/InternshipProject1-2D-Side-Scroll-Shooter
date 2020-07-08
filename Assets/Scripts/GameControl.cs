@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameControl : MonoBehaviour
@@ -10,13 +11,14 @@ public class GameControl : MonoBehaviour
 
     private void Awake()
     {
-        score = 0;
+        score = PlayerPrefs.GetInt("PlayerScore");
         level = 1;
     }
     void Update()
     {
-        level = score / 10 + 1;
+        level = SceneManager.GetActiveScene().buildIndex;
         scoreText.text = "Score: " + score;
         levelText.text = "Level: " + level;
+        PlayerPrefs.SetInt("PlayerScore", score);
     }
 }

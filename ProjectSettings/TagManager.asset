@@ -7,6 +7,7 @@ TagManager:
   - BorderTag
   - EnemyTag
   - BulletTag
+  - BackgroundTag
   layers:
   - Default
   - TransparentFX

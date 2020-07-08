@@ -5,9 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class MenuControl : MonoBehaviour
 {
-
+    private void Awake()
+    {
+        PlayerPrefs.DeleteAll();
+    }
     public void StartGame()
     {
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("Level1");
     }
 }
