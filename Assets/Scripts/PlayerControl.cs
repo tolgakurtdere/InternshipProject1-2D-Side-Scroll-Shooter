@@ -142,7 +142,9 @@ public class PlayerControl : MonoBehaviour
             if (gameOverTime >= 1f)
             {
                 gameOverTime = 0;
-                SceneManager.LoadScene("MainMenu");
+                PlayerPrefs.DeleteAll();
+                GameControl.score = 0;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
         

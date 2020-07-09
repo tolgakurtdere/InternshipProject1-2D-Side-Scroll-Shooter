@@ -119,3 +119,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e94dedf8816c1e439d8fcaac196c9e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deadSprite: {fileID: 21300000, guid: 83b0b597a89695f46bcf6e5e615a3aca, type: 3}
