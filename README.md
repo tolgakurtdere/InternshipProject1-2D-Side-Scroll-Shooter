@@ -1,5 +1,6 @@
 # InternshipProject1-2D-Side-Scroll-Shooter
 Simple 2D Side Scroll Shooter game made in unity and written in C#
+(Unity 2018.4.19f1)
 
 You can play on https://tolgahankurtdere.itch.io/internshipproject1-2d-side-scroll-shooter
 
